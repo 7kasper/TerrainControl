@@ -25,7 +25,6 @@ import java.util.Random;
 
 // Please don`t remove this. This disable warnings about x+0 arithmetic
 // operations in my IDE. Khorn.
-@SuppressWarnings("PointlessArithmeticExpression")
 public class ChunkProviderTC
 {
     // Several constants describing the chunk size of Minecraft

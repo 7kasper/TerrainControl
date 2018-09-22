@@ -232,7 +232,6 @@ public interface LocalWorld
      * @param z Block z.
      * @return The NBT data.
      */
-    @SuppressWarnings("UnusedDeclaration")
     NamedBinaryTag getMetadata(int x, int y, int z);
 
     /**

@@ -7,12 +7,12 @@ import com.khorn.terraincontrol.bukkit.util.MobSpawnGroupHelper;
 import com.khorn.terraincontrol.bukkit.util.WorldHelper;
 import com.khorn.terraincontrol.configuration.BiomeConfig;
 import com.khorn.terraincontrol.configuration.WeightedMobSpawnGroup;
-import com.khorn.terraincontrol.configuration.standard.PluginStandardValues;
 import com.khorn.terraincontrol.configuration.standard.WorldStandardValues;
 import com.khorn.terraincontrol.logging.LogMarker;
 import com.khorn.terraincontrol.util.helpers.StringHelper;
-import net.minecraft.server.v1_12_R1.BiomeBase;
-import net.minecraft.server.v1_12_R1.MinecraftKey;
+import net.minecraft.server.v1_13_R2.BiomeBase;
+import net.minecraft.server.v1_13_R2.EnumCreatureType;
+
 import org.bukkit.block.Biome;
 
 import java.util.List;
@@ -33,7 +33,8 @@ public class TXBiomeBase extends BiomeBase
 
         public BiomeBase_a(String name, BiomeConfig biomeConfig)
         {
-            super(name);
+            super();
+            a(name);
 
             // Minecraft doesn't like temperatures between 0.1 and 0.2, so avoid
             // them: round them to either 0.1 or 0.2
@@ -52,11 +53,11 @@ public class TXBiomeBase extends BiomeBase
             b(biomeConfig.biomeWetness);
             if (biomeConfig.biomeWetness <= 0.0001)
             {
-                a(); // disableRain()
+                a(Precipitation.NONE); // disableRain()
             }
             if (biomeConfig.biomeTemperature <= WorldStandardValues.SNOW_AND_ICE_MAX_TEMP)
             {
-                b(); // enableSnowfall()
+            	a(Precipitation.SNOW); // enableSnowfall()
             }
         }
     }
@@ -64,7 +65,7 @@ public class TXBiomeBase extends BiomeBase
     /**
      * Creates a CustomBiome instance. Minecraft automatically registers those
      * instances in the BiomeBase constructor. We don't want this for virtual
-     * biomes (the shouldn't overwrite real biomes), so we restore the old
+     * biomes (they shouldn't overwrite real biomes), so we restore the old
      * biome, unregistering the virtual biome.
      *
      * @param biomeConfig Settings of the biome
@@ -77,16 +78,17 @@ public class TXBiomeBase extends BiomeBase
 
         // Insert the biome in Minecraft's biome mapping
         String biomeNameWithoutSpaces = StringHelper.toComputerFriendlyName(biomeConfig.getName());
-        MinecraftKey biomeKey = new MinecraftKey(PluginStandardValues.PLUGIN_NAME, biomeNameWithoutSpaces);
+        //MinecraftKey biomeKey = new MinecraftKey(PluginStandardValues.PLUGIN_NAME, biomeNameWithoutSpaces);
         int savedBiomeId = biomeIds.getSavedId();
 
         // We need to init array size because Mojang uses a strange custom
         // ArrayList. RegistryID arrays are not correctly (but randomly!) copied
         // when resized.
-        if(BiomeBase.getBiome(MAX_TC_BIOME_ID) == null) {
-            BiomeBase.REGISTRY_ID.a(MAX_TC_BIOME_ID,
-                    new MinecraftKey(PluginStandardValues.PLUGIN_NAME, "null"),
-                    new TXBiomeBase(biomeConfig, new BiomeIds(MAX_TC_BIOME_ID, MAX_TC_BIOME_ID)));
+        if(BiomeBase.getBiome(MAX_TC_BIOME_ID, null) == null) {
+//            BiomeBase.a(MAX_TC_BIOME_ID,
+//                    new MinecraftKey(PluginStandardValues.PLUGIN_NAME, "null"),
+//                    new TXBiomeBase(biomeConfig, new BiomeIds(MAX_TC_BIOME_ID, MAX_TC_BIOME_ID)));
+        	BiomeBase.aG.add(new TXBiomeBase(biomeConfig, new BiomeIds(MAX_TC_BIOME_ID, MAX_TC_BIOME_ID)));
         }
 
         if (biomeIds.isVirtual())
@@ -95,20 +97,24 @@ public class TXBiomeBase extends BiomeBase
             // In this way, the id --> biome mapping returns the original biome,
             // and the biome --> id mapping returns savedBiomeId for both the
             // original and custom biome
-            BiomeBase existingBiome = BiomeBase.getBiome(savedBiomeId);
+            BiomeBase existingBiome = BiomeBase.getBiome(savedBiomeId, null);
 
             if (existingBiome == null)
             {
                 // Original biome not yet registered. This is because it's a
                 // custom biome that is loaded after this virtual biome, so it
                 // will soon be registered
-                BiomeBase.REGISTRY_ID.a(savedBiomeId, biomeKey, customBiome);
+                //BiomeBase.REGISTRY_ID.a(savedBiomeId, biomeKey, customBiome);
+            	BiomeBase.aG.add(customBiome);
                 TerrainControl.log(LogMarker.DEBUG, ",{},{},{}", biomeConfig.getName(), savedBiomeId, biomeIds.getGenerationId());
             } else
             {
-                MinecraftKey existingBiomeKey = BiomeBase.REGISTRY_ID.b(existingBiome);
-                BiomeBase.REGISTRY_ID.a(savedBiomeId, biomeKey, customBiome);
-                BiomeBase.REGISTRY_ID.a(savedBiomeId, existingBiomeKey, existingBiome);
+            	//TODO: :THONKING:
+            	BiomeBase.aG.add(customBiome);
+            	BiomeBase.aG.add(existingBiome);
+                //MinecraftKey existingBiomeKey = BiomeBase.REGISTRY_ID.b(existingBiome);
+               // BiomeBase.REGISTRY_ID.a(savedBiomeId, biomeKey, customBiome);
+                //BiomeBase.REGISTRY_ID.a(savedBiomeId, existingBiomeKey, existingBiome);
 
                 // String existingBiomeName = existingBiome.getClass().getSimpleName();
                 // if(existingBiome instanceof CustomBiome) {
@@ -119,8 +125,9 @@ public class TXBiomeBase extends BiomeBase
         } else
         {
             // Normal insertion
-            BiomeBase.REGISTRY_ID.a(savedBiomeId, biomeKey, customBiome);
-
+            //BiomeBase.REGISTRY_ID.a(savedBiomeId, biomeKey, customBiome);
+        	BiomeBase.aG.add(customBiome);
+        	
             TerrainControl.log(LogMarker.DEBUG, ",{},{},{}", biomeConfig.getName(), savedBiomeId, biomeIds.getGenerationId());
         }
 
@@ -148,7 +155,7 @@ public class TXBiomeBase extends BiomeBase
      */
     private static void checkRegistry() {
         for(int i = 168; i >= 0; --i) {
-            BiomeBase biome = getBiome(i);
+            BiomeBase biome = getBiome(i, null);
             if(biome != null && biome instanceof TXBiomeBase && ((TXBiomeBase) biome).generationId != i) {
                 throw new AssertionError("Biome ID #" + i + " returns custom biome #" +
                         ((TXBiomeBase) biome).generationId + " instead of its own.");
@@ -167,14 +174,15 @@ public class TXBiomeBase extends BiomeBase
             throw new AssertionError("Biome temperature mismatch");
         }
 
-        this.q = ((BukkitMaterialData) biomeConfig.surfaceBlock).internalBlock();
-        this.r = ((BukkitMaterialData) biomeConfig.groundBlock).internalBlock();
+        //TODO: Ground & Survace block.
+        //this.q = ((BukkitMaterialData) biomeConfig.surfaceBlock).internalBlock();
+        //this.r = ((BukkitMaterialData) biomeConfig.groundBlock).internalBlock();
 
         // Mob spawning
-        addMobs(this.t, biomeConfig.spawnMonsters);
-        addMobs(this.u, biomeConfig.spawnCreatures);
-        addMobs(this.v, biomeConfig.spawnWaterCreatures);
-        addMobs(this.w, biomeConfig.spawnAmbientCreatures);
+        addMobs(this.getMobs(EnumCreatureType.MONSTER), biomeConfig.spawnMonsters);
+        addMobs(this.getMobs(EnumCreatureType.CREATURE), biomeConfig.spawnCreatures);
+        addMobs(this.getMobs(EnumCreatureType.WATER_CREATURE), biomeConfig.spawnWaterCreatures);
+        addMobs(this.getMobs(EnumCreatureType.AMBIENT), biomeConfig.spawnAmbientCreatures);
     }
 
     // Adds the mobs to the internal list.

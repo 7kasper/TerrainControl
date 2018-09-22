@@ -12,7 +12,7 @@ public class BlockHelper
      * @param data Block data.
      * @return The rotated block data.
      */
-    @SuppressWarnings({"PointlessBitwiseExpression", "incomplete-switch"})
+    @SuppressWarnings({"incomplete-switch"})
     public static int rotateData(DefaultMaterial mat, int data)
     {
         switch (mat)

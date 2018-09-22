@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.khorn.terraincontrol.configuration.WeightedMobSpawnGroup;
 import com.khorn.terraincontrol.util.minecraftTypes.MobNames;
-import net.minecraft.server.v1_12_R1.DispenserRegistry;
+import net.minecraft.server.v1_13_R2.DispenserRegistry;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;

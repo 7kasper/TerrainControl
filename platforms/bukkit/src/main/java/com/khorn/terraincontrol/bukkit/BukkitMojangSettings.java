@@ -4,7 +4,9 @@ import com.khorn.terraincontrol.LocalMaterialData;
 import com.khorn.terraincontrol.bukkit.util.MobSpawnGroupHelper;
 import com.khorn.terraincontrol.configuration.WeightedMobSpawnGroup;
 import com.khorn.terraincontrol.configuration.standard.MojangSettings;
-import net.minecraft.server.v1_12_R1.BiomeBase;
+
+import net.minecraft.server.v1_13_R2.BiomeBase;
+import net.minecraft.server.v1_13_R2.Block;
 
 import java.util.List;
 
@@ -27,7 +29,7 @@ public final class BukkitMojangSettings implements MojangSettings
      */
     public static MojangSettings fromId(int biomeId)
     {
-        return fromBiomeBase(BiomeBase.getBiome(biomeId));
+        return fromBiomeBase(BiomeBase.getBiome(biomeId, null));
     }
 
     /**
@@ -62,25 +64,25 @@ public final class BukkitMojangSettings implements MojangSettings
     @Override
     public float getSurfaceHeight()
     {
-        return biomeBase.j();
+        return biomeBase.h();
     }
 
     @Override
     public float getSurfaceVolatility()
     {
-        return biomeBase.m();
+        return biomeBase.l();
     }
 
     @Override
     public LocalMaterialData getSurfaceBlock()
     {
-        return BukkitMaterialData.ofMinecraftBlockData(biomeBase.q);
+        return BukkitMaterialData.ofMinecraftBlockData(Block.REGISTRY_ID.fromId(1));
     }
 
     @Override
     public LocalMaterialData getGroundBlock()
     {
-        return BukkitMaterialData.ofMinecraftBlockData(biomeBase.r);
+        return BukkitMaterialData.ofMinecraftBlockData(Block.REGISTRY_ID.fromId(1));
     }
 
     @Override

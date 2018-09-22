@@ -8,9 +8,8 @@ import com.khorn.terraincontrol.configuration.standard.PluginStandardValues;
 import com.khorn.terraincontrol.exception.InvalidConfigException;
 import com.khorn.terraincontrol.util.NamedBinaryTag;
 import com.khorn.terraincontrol.util.minecraftTypes.DefaultMaterial;
-import net.minecraft.server.v1_12_R1.Block;
-import net.minecraft.server.v1_12_R1.MojangsonParseException;
-import net.minecraft.server.v1_12_R1.MojangsonParser;
+import net.minecraft.server.v1_13_R2.Block;
+import net.minecraft.server.v1_13_R2.MojangsonParser;
 
 import java.io.File;
 
@@ -50,11 +49,11 @@ public class BukkitEngine extends TerrainControlEngine
         // This is so that things like "minecraft:stone" aren't parsed
         // as the block "minecraft" with data "stone", but instead as the
         // block "minecraft:stone" with no block data.
-        Block block = Block.getByName(input);
-        if (block != null)
-        {
-            return BukkitMaterialData.ofMinecraftBlock(block);
-        }
+        //Block block = Block.getByName(input);
+//        if (block != null)
+//        {
+//            return BukkitMaterialData.ofMinecraftBlock(block);
+//        }
 
         try
         {
@@ -86,13 +85,13 @@ public class BukkitEngine extends TerrainControlEngine
         }
 
         // Parse block name
-        Block block = Block.getByName(blockName);
+        Block block = null;//Block.getByName(blockName);
         if (block == null)
         {
             DefaultMaterial defaultMaterial = DefaultMaterial.getMaterial(blockName);
             if (defaultMaterial != DefaultMaterial.UNKNOWN_BLOCK)
             {
-                block = Block.getById(defaultMaterial.id);
+                block = null;// Block.getByCombinedId(defaultMaterial.id);
             }
         }
 
@@ -108,7 +107,7 @@ public class BukkitEngine extends TerrainControlEngine
                 // Use specified data
                 try
                 {
-                    return BukkitMaterialData.ofMinecraftBlockData(block.fromLegacyData(blockData));
+                    //return BukkitMaterialData.ofMinecraftBlockData(block.fromLegacyData(blockData));
                 } catch (IllegalArgumentException e)
                 {
                     throw new InvalidConfigException("Illegal block data for the block type, cannot use " + input);
@@ -132,7 +131,7 @@ public class BukkitEngine extends TerrainControlEngine
         try
         {
             return NBTHelper.getNBTFromNMSTagCompound("", MojangsonParser.parse(mojangson));
-        } catch (MojangsonParseException e)
+        } catch (Exception e)
         {
             throw new InvalidConfigException("Error parsing NBT data \n" + mojangson + "\n" + e.getLocalizedMessage());
         }

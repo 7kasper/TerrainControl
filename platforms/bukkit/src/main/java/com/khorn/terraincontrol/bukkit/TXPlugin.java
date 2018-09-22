@@ -5,15 +5,12 @@ import com.khorn.terraincontrol.bukkit.commands.TXCommandExecutor;
 import com.khorn.terraincontrol.bukkit.events.TCListener;
 import com.khorn.terraincontrol.bukkit.generator.BukkitVanillaBiomeGenerator;
 import com.khorn.terraincontrol.bukkit.generator.TXChunkGenerator;
-import com.khorn.terraincontrol.bukkit.generator.structures.TXRareBuildingGen.RareBuildingStart;
-import com.khorn.terraincontrol.bukkit.generator.structures.TXVillageGen.VillageStart;
 import com.khorn.terraincontrol.bukkit.metrics.BukkitMetricsHelper;
 import com.khorn.terraincontrol.configuration.ServerConfigProvider;
 import com.khorn.terraincontrol.configuration.standard.PluginStandardValues;
 import com.khorn.terraincontrol.generator.biome.VanillaBiomeGenerator;
 import com.khorn.terraincontrol.logging.LogMarker;
-import com.khorn.terraincontrol.util.minecraftTypes.StructureNames;
-import net.minecraft.server.v1_12_R1.WorldGenFactory;
+import net.minecraft.server.v1_13_R2.WorldGenFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -84,8 +81,8 @@ public class TXPlugin extends JavaPlugin
             {
                 Method registerStructure = WorldGenFactory.class.getDeclaredMethod("b", Class.class, String.class);
                 registerStructure.setAccessible(true);
-                registerStructure.invoke(null, RareBuildingStart.class, StructureNames.RARE_BUILDING);
-                registerStructure.invoke(null, VillageStart.class, StructureNames.VILLAGE);
+//                registerStructure.invoke(null, RareBuildingStart.class, StructureNames.RARE_BUILDING);
+//                registerStructure.invoke(null, VillageStart.class, StructureNames.VILLAGE);
             } catch (Exception e)
             {
                 TerrainControl.log(LogMarker.FATAL, "Failed to register structures:");

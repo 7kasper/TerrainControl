@@ -7,8 +7,11 @@ import com.khorn.terraincontrol.bukkit.commands.BaseCommand;
 import com.khorn.terraincontrol.bukkit.util.WorldHelper;
 import com.khorn.terraincontrol.configuration.BiomeConfig;
 import com.khorn.terraincontrol.logging.LogMarker;
-import net.minecraft.server.v1_12_R1.BiomeBase;
-import net.minecraft.server.v1_12_R1.World;
+
+import net.minecraft.server.v1_13_R2.BiomeBase;
+import net.minecraft.server.v1_13_R2.BlockPosition;
+import net.minecraft.server.v1_13_R2.World;
+
 import org.bukkit.command.CommandSender;
 
 import java.awt.Color;
@@ -112,6 +115,7 @@ public class MapWriter implements Runnable
 
         int imageX = 0;
         int imageY = 0;
+        int i = 0;
 
         for (int x = -height / 2; x < height / 2; x++)
         {
@@ -130,7 +134,7 @@ public class MapWriter implements Runnable
                     time = time2;
                 }
 
-                biomeBuffer = world.getWorldChunkManager().getBiomeBlock(biomeBuffer, offsetX + x * 16, offsetZ + z * 16, 16, 16);
+                biomeBuffer[i++] = world.getBiome(new BlockPosition(offsetX + x * 16, offsetZ + z * 16, 64));
                 for (int x1 = 0; x1 < 16; x1++)
                 {
                     for (int z1 = 0; z1 < 16; z1++)

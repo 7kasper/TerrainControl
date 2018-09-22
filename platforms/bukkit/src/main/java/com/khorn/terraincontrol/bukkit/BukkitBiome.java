@@ -4,8 +4,9 @@ import com.khorn.terraincontrol.BiomeIds;
 import com.khorn.terraincontrol.LocalBiome;
 import com.khorn.terraincontrol.bukkit.util.WorldHelper;
 import com.khorn.terraincontrol.configuration.BiomeConfig;
-import net.minecraft.server.v1_12_R1.BiomeBase;
-import net.minecraft.server.v1_12_R1.BlockPosition;
+
+import net.minecraft.server.v1_13_R2.BiomeBase;
+import net.minecraft.server.v1_13_R2.BlockPosition;
 
 /**
  * The BukkitBiome is basically a wrapper for the BiomeBase. If you look at
@@ -46,7 +47,7 @@ public class BukkitBiome implements LocalBiome
     protected BukkitBiome(BiomeConfig biomeConfig, BiomeBase biome)
     {
         this.biomeBase = biome;
-        int savedBiomeId =  BiomeBase.a(biomeBase);
+        int savedBiomeId =  biomeBase.n();
         this.biomeIds = new BiomeIds(WorldHelper.getGenerationId(biomeBase), savedBiomeId);
         this.biomeConfig = biomeConfig;
         this.isCustom = biome instanceof TXBiomeBase;
@@ -78,7 +79,7 @@ public class BukkitBiome implements LocalBiome
     @Override
     public float getTemperatureAt(int x, int y, int z)
     {
-        return this.biomeBase.a(new BlockPosition(x, y, z));
+        return this.biomeBase.c(new BlockPosition(x, y, z));
     }
 
     @Override

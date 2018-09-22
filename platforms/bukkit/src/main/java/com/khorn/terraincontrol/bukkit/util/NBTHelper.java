@@ -3,7 +3,7 @@ package com.khorn.terraincontrol.bukkit.util;
 import com.khorn.terraincontrol.TerrainControl;
 import com.khorn.terraincontrol.logging.LogMarker;
 import com.khorn.terraincontrol.util.NamedBinaryTag;
-import net.minecraft.server.v1_12_R1.*;
+import net.minecraft.server.v1_13_R2.*;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -100,7 +100,7 @@ public class NBTHelper
             return null;
         }
 
-        NamedBinaryTag.Type listType = NamedBinaryTag.Type.values()[nmsListTag.g()];
+        NamedBinaryTag.Type listType = NamedBinaryTag.Type.values()[nmsListTag.d()];
         NamedBinaryTag listTag = new NamedBinaryTag(name, listType);
 
         // Add all child tags
@@ -109,7 +109,7 @@ public class NBTHelper
             switch (listType)
             {
                 case TAG_Int_Array:
-                    listTag.addTag(new NamedBinaryTag(listType, null, nmsListTag.d(i)));
+                    listTag.addTag(new NamedBinaryTag(listType, null, nmsListTag.c(i)));
                     break;
                 case TAG_Float:
                     listTag.addTag(new NamedBinaryTag(listType, null, nmsListTag.g(i)));
@@ -121,7 +121,7 @@ public class NBTHelper
                     listTag.addTag(new NamedBinaryTag(listType, null, nmsListTag.getString(i)));
                     break;
                 case TAG_Compound:
-                    listTag.addTag(getNBTFromNMSTagCompound(null, nmsListTag.get(i)));
+                    listTag.addTag(getNBTFromNMSTagCompound(null, nmsListTag.getCompound(i)));
                     break;
                 default:
                     TerrainControl.log(LogMarker.INFO, "Cannot convert list subtype {} from it's NMS value", new Object[] {listType});
@@ -167,7 +167,7 @@ public class NBTHelper
                 byte[] theByteArray = ((NBTTagByteArray) nmsTag).c();
                 return theByteArray;
             case TAG_String:
-                String theString = ((NBTTagString) nmsTag).c_();
+                String theString = ((NBTTagString) nmsTag).b_();
                 return theString;
             case TAG_Int_Array:
                 int[] theIntArray = ((NBTTagIntArray) nmsTag).d();

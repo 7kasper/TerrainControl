@@ -20,9 +20,13 @@ import com.khorn.terraincontrol.util.helpers.ReflectionHelper;
 import com.khorn.terraincontrol.util.minecraftTypes.DefaultBiome;
 import com.khorn.terraincontrol.util.minecraftTypes.MobNames;
 import com.khorn.terraincontrol.util.minecraftTypes.TreeType;
-import net.minecraft.server.v1_12_R1.*;
-import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_12_R1.generator.CustomChunkGenerator;
+import com.mojang.datafixers.DataFixer;
+
+import net.minecraft.server.v1_13_R2.*;
+import net.minecraft.server.v1_13_R2.HeightMap.Type;
+
+import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_13_R2.generator.CustomChunkGenerator;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
 import java.util.*;
@@ -38,7 +42,7 @@ public class BukkitWorld implements LocalWorld
     private CustomObjectStructureCache structureCache;
     private String name;
     private BiomeGenerator biomeGenerator;
-    private DataConverter dataConverter;
+    private DataFixer dataConverter;
 
     private static int nextBiomeId = DefaultBiome.values().length;
 
@@ -47,13 +51,13 @@ public class BukkitWorld implements LocalWorld
 
     private final Map<String, LocalBiome> biomeNames = new HashMap<String, LocalBiome>();
 
-    public TXStrongholdGen strongholdGen;
-    public TXVillageGen villageGen;
-    public TXMineshaftGen mineshaftGen;
-    public TXRareBuildingGen rareBuildingGen;
-    public TXMansionGen mansionGen;
-    public TXNetherFortressGen netherFortressGen;
-    public TXOceanMonumentGen oceanMonumentGen;
+//    public TXStrongholdGen strongholdGen;
+//    public TXVillageGen villageGen;
+//    public TXMineshaftGen mineshaftGen;
+//    public TXRareBuildingGen rareBuildingGen;
+//    public TXMansionGen mansionGen;
+//    public TXNetherFortressGen netherFortressGen;
+//    public TXOceanMonumentGen oceanMonumentGen;
 
     private WorldGenDungeons dungeon;
     private WorldGenFossils fossil;
@@ -65,8 +69,8 @@ public class BukkitWorld implements LocalWorld
     private WorldGenTrees cocoaTree;
     private WorldGenForestTree darkOakTree;
     private WorldGenGroundBush groundBush;
-    private WorldGenHugeMushroom hugeBrownMushroom;
-    private WorldGenHugeMushroom hugeRedMushroom;
+    private WorldGenHugeMushroomBrown hugeBrownMushroom;
+    private WorldGenHugeMushroomRed hugeRedMushroom;
     private WorldGenMegaTree hugeTaigaTree1;
     private WorldGenMegaTree hugeTaigaTree2;
     private WorldGenJungleTree jungleTree;
@@ -91,7 +95,7 @@ public class BukkitWorld implements LocalWorld
             biome = BukkitBiome.forCustomBiome(biomeConfig, biomeIds);
         } else
         {
-            biome = BukkitBiome.forVanillaBiome(biomeConfig, BiomeBase.getBiome(biomeIds.getSavedId()));
+            biome = BukkitBiome.forVanillaBiome(biomeConfig, BiomeBase.getBiome(biomeIds.getSavedId(), null));
         }
 
         this.biomeNames.put(biome.getName(), biome);
@@ -158,34 +162,34 @@ public class BukkitWorld implements LocalWorld
     @Override
     public void prepareDefaultStructures(int chunkX, int chunkZ, boolean dry)
     {
-        WorldConfig worldConfig = this.settings.getWorldConfig();
+//        WorldConfig worldConfig = this.settings.getWorldConfig();
 
-        if (worldConfig.strongholdsEnabled)
-            this.strongholdGen.a(this.world, chunkX, chunkZ, null);
-        if (worldConfig.mineshaftsEnabled)
-            this.mineshaftGen.a(this.world, chunkX, chunkZ, null);
-        if (worldConfig.villagesEnabled && dry)
-            this.villageGen.a(this.world, chunkX, chunkZ, null);
-        if (worldConfig.rareBuildingsEnabled)
-            this.rareBuildingGen.a(this.world, chunkX, chunkZ, null);
-        if (worldConfig.netherFortressesEnabled)
-            this.netherFortressGen.a(this.world, chunkX, chunkZ, null);
-        if (worldConfig.oceanMonumentsEnabled)
-            this.oceanMonumentGen.a(this.world, chunkX, chunkZ, null);
-        if (worldConfig.mansionsEnabled)
-            this.mansionGen.a(this.world, chunkX, chunkZ, null);
+//        if (worldConfig.strongholdsEnabled)
+//            this.strongholdGen.a(this.world, chunkX, chunkZ, null);
+//        if (worldConfig.mineshaftsEnabled)
+//            this.mineshaftGen.a(this.world, chunkX, chunkZ, null);
+//        if (worldConfig.villagesEnabled && dry)
+//            this.villageGen.a(this.world, chunkX, chunkZ, null);
+//        if (worldConfig.rareBuildingsEnabled)
+//            this.rareBuildingGen.a(this.world, chunkX, chunkZ, null);
+//        if (worldConfig.netherFortressesEnabled)
+//            this.netherFortressGen.a(this.world, chunkX, chunkZ, null);
+//        if (worldConfig.oceanMonumentsEnabled)
+//            this.oceanMonumentGen.a(this.world, chunkX, chunkZ, null);
+//        if (worldConfig.mansionsEnabled)
+//            this.mansionGen.a(this.world, chunkX, chunkZ, null);
     }
 
     @Override
     public void placeDungeon(Random rand, int x, int y, int z)
     {
-        dungeon.generate(world, rand, new BlockPosition(x, y, z));
+//        dungeon.generate(world, rand, new BlockPosition(x, y, z));
     }
 
     @Override
     public void placeFossil(Random rand, ChunkCoordinate chunkCoord)
     {
-        fossil.generate(world, rand, new BlockPosition(chunkCoord.getBlockX(), 0, chunkCoord.getBlockZ()));
+//        fossil.generate(world, rand, new BlockPosition(chunkCoord.getBlockX(), 0, chunkCoord.getBlockZ()));
     }
 
     @Override
@@ -194,47 +198,47 @@ public class BukkitWorld implements LocalWorld
         BlockPosition blockPos = new BlockPosition(x, y, z);
         switch (type)
         {
-            case Tree:
-                return tree.generate(this.world, rand, blockPos);
-            case BigTree:
-                return bigTree.generate(this.world, rand, blockPos);
-            case Forest:
-            case Birch:
-                return birchTree.generate(this.world, rand, blockPos);
-            case TallBirch:
-                return longBirchTree.generate(this.world, rand, blockPos);
-            case HugeMushroom:
-                if (rand.nextBoolean())
-                {
-                    return hugeBrownMushroom.generate(this.world, rand, blockPos);
-                } else
-                {
-                    return hugeRedMushroom.generate(this.world, rand, blockPos);
-                }
-            case HugeRedMushroom:
-                return hugeRedMushroom.generate(this.world, rand, blockPos);
-            case HugeBrownMushroom:
-                return hugeBrownMushroom.generate(this.world, rand, blockPos);
-            case SwampTree:
-                return swampTree.generate(this.world, rand, blockPos);
-            case Taiga1:
-                return taigaTree1.generate(this.world, rand, blockPos);
-            case Taiga2:
-                return taigaTree2.generate(this.world, rand, blockPos);
-            case JungleTree:
-                return jungleTree.generate(this.world, rand, blockPos);
-            case GroundBush:
-                return groundBush.generate(this.world, rand, blockPos);
-            case CocoaTree:
-                return cocoaTree.generate(this.world, rand, blockPos);
-            case Acacia:
-                return acaciaTree.generate(this.world, rand, blockPos);
-            case DarkOak:
-                return darkOakTree.generate(this.world, rand, blockPos);
-            case HugeTaiga1:
-                return hugeTaigaTree1.generate(this.world, rand, blockPos);
-            case HugeTaiga2:
-                return hugeTaigaTree2.generate(this.world, rand, blockPos);
+//            case Tree:
+//                return tree.generate(this.world, rand, blockPos);
+//            case BigTree:
+//                return bigTree.generate(this.world, rand, blockPos);
+//            case Forest:
+//            case Birch:
+//                return birchTree.generate(this.world, rand, blockPos);
+//            case TallBirch:
+//                return longBirchTree.generate(this.world, rand, blockPos);
+//            case HugeMushroom:
+//                if (rand.nextBoolean())
+//                {
+//                    return hugeBrownMushroom.generate(this.world, rand, blockPos);
+//                } else
+//                {
+//                    return hugeRedMushroom.generate(this.world, rand, blockPos);
+//                }
+//            case HugeRedMushroom:
+//                return hugeRedMushroom.generate(this.world, rand, blockPos);
+//            case HugeBrownMushroom:
+//                return hugeBrownMushroom.generate(this.world, rand, blockPos);
+//            case SwampTree:
+//                return swampTree.generate(this.world, rand, blockPos);
+//            case Taiga1:
+//                return taigaTree1.generate(this.world, rand, blockPos);
+//            case Taiga2:
+//                return taigaTree2.generate(this.world, rand, blockPos);
+//            case JungleTree:
+//                return jungleTree.generate(this.world, rand, blockPos);
+//            case GroundBush:
+//                return groundBush.generate(this.world, rand, blockPos);
+//            case CocoaTree:
+//                return cocoaTree.generate(this.world, rand, blockPos);
+//            case Acacia:
+//                return acaciaTree.generate(this.world, rand, blockPos);
+//            case DarkOak:
+//                return darkOakTree.generate(this.world, rand, blockPos);
+//            case HugeTaiga1:
+//                return hugeTaigaTree1.generate(this.world, rand, blockPos);
+//            case HugeTaiga2:
+//                return hugeTaigaTree2.generate(this.world, rand, blockPos);
             default:
                 throw new RuntimeException("Failed to handle tree of type " + type.toString());
         }
@@ -247,20 +251,20 @@ public class BukkitWorld implements LocalWorld
         WorldConfig worldConfig = this.settings.getWorldConfig();
         boolean villageGenerated = false;
 
-        if (worldConfig.strongholdsEnabled)
-            this.strongholdGen.a(this.world, random, chunkIntPair);
-        if (worldConfig.mineshaftsEnabled)
-            this.mineshaftGen.a(this.world, random, chunkIntPair);
-        if (worldConfig.villagesEnabled)
-            villageGenerated = this.villageGen.a(this.world, random, chunkIntPair);
-        if (worldConfig.rareBuildingsEnabled)
-            this.rareBuildingGen.a(this.world, random, chunkIntPair);
-        if (worldConfig.netherFortressesEnabled)
-            this.netherFortressGen.a(this.world, random, chunkIntPair);
-        if (worldConfig.oceanMonumentsEnabled)
-            this.oceanMonumentGen.a(this.world, random, chunkIntPair);
-        if (worldConfig.mansionsEnabled)
-            this.mansionGen.a(this.world, random, chunkIntPair);
+//        if (worldConfig.strongholdsEnabled)
+//            this.strongholdGen.a(this.world, random, chunkIntPair);
+//        if (worldConfig.mineshaftsEnabled)
+//            this.mineshaftGen.a(this.world, random, chunkIntPair);
+//        if (worldConfig.villagesEnabled)
+//            villageGenerated = this.villageGen.a(this.world, random, chunkIntPair);
+//        if (worldConfig.rareBuildingsEnabled)
+//            this.rareBuildingGen.a(this.world, random, chunkIntPair);
+//        if (worldConfig.netherFortressesEnabled)
+//            this.netherFortressGen.a(this.world, random, chunkIntPair);
+//        if (worldConfig.oceanMonumentsEnabled)
+//            this.oceanMonumentGen.a(this.world, random, chunkIntPair);
+//        if (worldConfig.mansionsEnabled)
+//            this.mansionGen.a(this.world, random, chunkIntPair);
 
         return villageGenerated;
     }
@@ -308,7 +312,7 @@ public class BukkitWorld implements LocalWorld
                         for (int sectionY = 0; sectionY < 16; sectionY++)
                         {
                             IBlockData block = section.getType(sectionX, sectionY, sectionZ);
-                            int blockId = Block.getId(block.getBlock());
+                            int blockId = Block.getCombinedId(block.getBlock().getBlockData());
                             if (replaceArray[blockId] == null)
                                 continue;
 
@@ -331,7 +335,7 @@ public class BukkitWorld implements LocalWorld
     @Override
     public void placePopulationMobs(LocalBiome biome, Random random, ChunkCoordinate chunkCoord)
     {
-        SpawnerCreature.a(this.world, ((BukkitBiome) biome).getHandle(), chunkCoord.getChunkX() * 16 + 8, chunkCoord.getChunkZ() * 16 + 8, 16, 16, random);
+//        SpawnerCreature.a(this.world, ((BukkitBiome) biome).getHandle(), chunkCoord.getChunkX() * 16 + 8, chunkCoord.getChunkZ() * 16 + 8, 16, 16, random);
     }
 
     private Chunk getChunk(int x, int y, int z)
@@ -411,7 +415,7 @@ public class BukkitWorld implements LocalWorld
         {
             return true;
         }
-        return chunk.a(x & 0xF, y, z & 0xF).getMaterial().equals(Material.AIR);
+        return chunk.getBlockData(x & 0xF, y, z & 0xF).getMaterial().equals(Material.AIR);
     }
 
     @Override
@@ -423,7 +427,7 @@ public class BukkitWorld implements LocalWorld
             return BukkitMaterialData.ofMinecraftBlock(Blocks.AIR);
         }
 
-        return BukkitMaterialData.ofMinecraftBlockData(chunk.a(x, y, z));
+        return BukkitMaterialData.ofMinecraftBlockData(chunk.getBlockData(x, y, z));
     }
 
     @Override
@@ -458,7 +462,7 @@ public class BukkitWorld implements LocalWorld
             // Disable nearby block physics (except for tile entities) and set block
             boolean oldCaptureBlockStates = this.world.captureBlockStates;
             this.world.captureBlockStates = !(blockData.getBlock() instanceof ITileEntity);
-            IBlockData oldBlockData = chunk.a(blockPos, blockData);
+            IBlockData oldBlockData = chunk.a(blockPos, blockData, false); //TODO check boolean
             this.world.captureBlockStates = oldCaptureBlockStates;
 
             if (oldBlockData == null)
@@ -466,19 +470,19 @@ public class BukkitWorld implements LocalWorld
                 return;
             }
 
-            if (blockData.c() != oldBlockData.c() || blockData.d() != oldBlockData.d())
-            {
-                if (isSafeForLightUpdates(chunk, x, z))
-                {
-                    // Relight
-                    world.methodProfiler.a("checkLight");
-                    world.w(blockPos);
-                    world.methodProfiler.b();
-                }
-            }
+//            if (blockData.c() != oldBlockData.c() || blockData.d() != oldBlockData.d())
+//            {
+//                if (isSafeForLightUpdates(chunk, x, z))
+//                {
+//                    // Relight
+//                    world.methodProfiler.a("checkLight");
+//                    world.w(blockPos);
+//                    world.methodProfiler.b();
+//                }
+//            }
 
             // Notify world: (2 | 16) == update client, don't update observers
-            world.notifyAndUpdatePhysics(blockPos, chunk, oldBlockData, blockData, 2 | 16);
+            world.notifyAndUpdatePhysics(blockPos, chunk, oldBlockData, blockData, Block.getByCombinedId(0), 2 | 16);
         } catch (Throwable t)
         {
             String populatingChunkInfo = this.chunkCache == null? "(no chunk)" :
@@ -525,11 +529,11 @@ public class BukkitWorld implements LocalWorld
             return -1;
         }
 
-        int y = chunk.b(x & 0xf, z & 0xf);
+        int y = chunk.a(net.minecraft.server.v1_13_R2.HeightMap.Type.WORLD_SURFACE, x & 0xf, z & 0xf);
 
         // Fix for incorrect light map
         boolean incorrectHeightMap = false;
-        while (y < getHeightCap() && chunk.a(x, y, z).getMaterial().blocksLight())
+        while (y < getHeightCap() && chunk.getBlockData(x, y, z).getMaterial().isSolid()) //TODO Blockslight?
         {
             y++;
             incorrectHeightMap = true;
@@ -537,7 +541,7 @@ public class BukkitWorld implements LocalWorld
         if (incorrectHeightMap && isSafeForLightUpdates(chunk, x, z))
         {
             // Let Minecraft know that it made an error
-            world.w(new BlockPosition(x, y, z)); // world.relight
+            world.x(new BlockPosition(x, y, z)); // world.relight
         }
 
         return y;
@@ -611,7 +615,7 @@ public class BukkitWorld implements LocalWorld
     @Override
     public int getLightLevel(int x, int y, int z)
     {
-        return world.j(new BlockPosition(x, y, z)); // world.getBlockAndSkyLightAsItWereDay
+        return world.getLightLevel(new BlockPosition(x, y, z)); // world.getBlockAndSkyLightAsItWereDay
     }
 
     @Override
@@ -719,13 +723,13 @@ public class BukkitWorld implements LocalWorld
             {
                 case Normal:
                 case OldGenerator:
-                    this.strongholdGen = new TXStrongholdGen(settings);
-                    this.villageGen = new TXVillageGen(settings);
-                    this.mineshaftGen = new TXMineshaftGen();
-                    this.rareBuildingGen = new TXRareBuildingGen(settings);
-                    this.mansionGen = new TXMansionGen(settings);
-                    this.netherFortressGen = new TXNetherFortressGen();
-                    this.oceanMonumentGen = new TXOceanMonumentGen(settings);
+//                    this.strongholdGen = new TXStrongholdGen(settings);
+//                    this.villageGen = new TXVillageGen(settings);
+//                    this.mineshaftGen = new TXMineshaftGen();
+//                    this.rareBuildingGen = new TXRareBuildingGen(settings);
+//                    this.mansionGen = new TXMansionGen(settings);
+//                    this.netherFortressGen = new TXNetherFortressGen();
+//                    this.oceanMonumentGen = new TXOceanMonumentGen(settings);
 
                     // Inject our own ChunkGenerator
                     injectInternalChunkGenerator(new TXInternalChunkGenerator(this, generator));
@@ -741,18 +745,18 @@ public class BukkitWorld implements LocalWorld
             this.fossil = new WorldGenFossils();
 
             // Initialize trees
-            IBlockData jungleLog = Blocks.LOG.getBlockData()
-                    .set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.JUNGLE);
-            IBlockData jungleLeaves = Blocks.LEAVES.getBlockData()
-                    .set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.JUNGLE)
-                    .set(BlockLeaves.CHECK_DECAY, false);
-            IBlockData oakLeaves = Blocks.LEAVES.getBlockData()
-                    .set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.OAK)
-                    .set(BlockLeaves.CHECK_DECAY, false);
+//            IBlockData jungleLog = Blocks.LOG.getBlockData()
+//                    .set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.JUNGLE);
+//            IBlockData jungleLeaves = Blocks.LEAVES.getBlockData()
+//                    .set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.JUNGLE)
+//                    .set(BlockLeaves.CHECK_DECAY, false);
+//            IBlockData oakLeaves = Blocks.LEAVES.getBlockData()
+//                    .set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.OAK)
+//                    .set(BlockLeaves.CHECK_DECAY, false);
 
             this.tree = new WorldGenTrees(false);
             this.acaciaTree = new WorldGenAcaciaTree(false);
-            this.cocoaTree = new WorldGenTrees(false, 5, jungleLog, jungleLeaves, true);
+//            this.cocoaTree = new WorldGenTrees(false, 5, jungleLog, jungleLeaves, true);
             this.bigTree = new WorldGenBigTree(false);
             this.birchTree = new WorldGenForest(false, false);
             this.darkOakTree = new WorldGenForestTree(false);
@@ -760,12 +764,12 @@ public class BukkitWorld implements LocalWorld
             this.swampTree = new WorldGenSwampTree();
             this.taigaTree1 = new WorldGenTaiga1();
             this.taigaTree2 = new WorldGenTaiga2(false);
-            this.hugeBrownMushroom = new WorldGenHugeMushroom(Blocks.BROWN_MUSHROOM_BLOCK);
-            this.hugeRedMushroom = new WorldGenHugeMushroom(Blocks.RED_MUSHROOM_BLOCK);
+            this.hugeBrownMushroom = new WorldGenHugeMushroomBrown();
+            this.hugeRedMushroom = new WorldGenHugeMushroomRed();
             this.hugeTaigaTree1 = new WorldGenMegaTree(false, false);
             this.hugeTaigaTree2 = new WorldGenMegaTree(false, true);
-            this.jungleTree = new WorldGenJungleTree(false, 10, 20, jungleLog, jungleLeaves);
-            this.groundBush = new WorldGenGroundBush(jungleLog, oakLeaves);
+//            this.jungleTree = new WorldGenJungleTree(false, 10, 20, jungleLog, jungleLeaves);
+//            this.groundBush = new WorldGenGroundBush(jungleLog, oakLeaves);
 
             this.initialized = true;
         } else
@@ -780,7 +784,7 @@ public class BukkitWorld implements LocalWorld
         if (biomeGenerator instanceof BukkitVanillaBiomeGenerator)
         {
             // Let our biome generator depend on Minecraft's
-            ((BukkitVanillaBiomeGenerator) biomeGenerator).setWorldChunkManager(this.world.worldProvider.k());
+            ((BukkitVanillaBiomeGenerator) biomeGenerator).setWorldChunkManager((WorldChunkManager) this.world.getChunkProvider()); //TODO ???
         } else
         {
             // Let Minecraft's biome generator depend on ours
@@ -835,7 +839,7 @@ public class BukkitWorld implements LocalWorld
     @Override
     public LocalBiome getSavedBiome(int x, int z) throws BiomeNotFoundException
     {
-        int savedId = BiomeBase.a(world.getBiome(new BlockPosition(x, 0, z)));
+        int savedId = world.getBiome(new BlockPosition(x, 0, z)).n();
         return getBiomeById(savedId);
     }
 
@@ -855,7 +859,7 @@ public class BukkitWorld implements LocalWorld
         nmsTag.setInt("z", z);
         // Update to current Minecraft format (maybe we want to do this at
         // server startup instead, and then save the result?)
-        nmsTag = this.dataConverter.a(DataConverterTypes.BLOCK_ENTITY, nmsTag, -1);
+//        nmsTag = this.dataConverter.a(DataConverterTypes.BLOCK_ENTITY, nmsTag, -1);
         // Add that data to the current tile entity in the world
         TileEntity tileEntity = world.getTileEntity(new BlockPosition(x, y, z));
         if (tileEntity != null)
@@ -900,7 +904,7 @@ public class BukkitWorld implements LocalWorld
     {
         MinecraftKey minecraftKey = new MinecraftKey(name);
         DefinedStructureManager mojangStructureParts = world.getDataManager().h();
-        DefinedStructure mojangStructurePart = mojangStructureParts.a(world.getMinecraftServer(), minecraftKey);
+        DefinedStructure mojangStructurePart = null;// mojangStructureParts.a(world.getMinecraftServer(), minecraftKey);
         if (mojangStructurePart == null)
         {
             return null;
@@ -911,7 +915,7 @@ public class BukkitWorld implements LocalWorld
     private Entity createEntity(MinecraftKey entityResource, NBTTagCompound optionalMeta)
     {
         // Note that the entity position is not set by this method
-        Class<? extends Entity> entityClass = EntityTypes.b.get(entityResource);
+        Class<? extends Entity> entityClass = null;//EntityTypes.b.get(entityResource);
         if (entityClass == null)
         {
             TerrainControl.log(LogMarker.WARN, "Unknown entity name: {}", entityResource);

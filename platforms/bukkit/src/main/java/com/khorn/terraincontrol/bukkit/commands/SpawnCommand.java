@@ -77,7 +77,7 @@ public class SpawnCommand extends BaseCommand
         while (itr.hasNext())
         {
             block = itr.next();
-            if (block.getType() != Material.AIR && block.getType() != Material.LONG_GRASS)
+            if (block.getType() != Material.AIR && block.getType() != Material.TALL_GRASS)
             {
                 return previousBlock;
             }

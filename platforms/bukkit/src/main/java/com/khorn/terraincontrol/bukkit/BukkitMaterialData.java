@@ -1,12 +1,14 @@
 package com.khorn.terraincontrol.bukkit;
 
+import org.bukkit.block.data.BlockData;
+
 import com.khorn.terraincontrol.LocalMaterialData;
 import com.khorn.terraincontrol.TerrainControl;
 import com.khorn.terraincontrol.util.helpers.BlockHelper;
 import com.khorn.terraincontrol.util.minecraftTypes.DefaultMaterial;
-import net.minecraft.server.v1_12_R1.Block;
-import net.minecraft.server.v1_12_R1.BlockFalling;
-import net.minecraft.server.v1_12_R1.IBlockData;
+
+import net.minecraft.server.v1_13_R2.Block;
+import net.minecraft.server.v1_13_R2.IBlockData;
 
 /**
  * Implementation of LocalMaterial that wraps one of Minecraft's Blocks.
@@ -35,6 +37,10 @@ public final class BukkitMaterialData implements LocalMaterialData
     public static BukkitMaterialData ofDefaultMaterial(DefaultMaterial material, int data)
     {
         return ofIds(material.id, data);
+    }
+
+    public static BukkitMaterialData ofBukkitBlock(BlockData data) {
+    	return ofIds(1,0);
     }
 
     /**

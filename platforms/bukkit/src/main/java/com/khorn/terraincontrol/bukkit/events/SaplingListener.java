@@ -114,7 +114,12 @@ class SaplingListener
             }
 
             // Ignore blocks that are not a log
-            if (blockState.getType() != Material.LOG && blockState.getType() != Material.LOG_2)
+            if (blockState.getType() != Material.ACACIA_LOG 
+        		&& blockState.getType() != Material.DARK_OAK_LOG
+        		&& blockState.getType() != Material.BIRCH_LOG
+        		&& blockState.getType() != Material.JUNGLE_LOG
+        		&& blockState.getType() != Material.OAK_LOG
+        		&& blockState.getType() != Material.SPRUCE_LOG)
             {
                 continue;
             }

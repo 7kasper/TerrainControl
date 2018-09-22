@@ -4,13 +4,16 @@ import com.khorn.terraincontrol.bukkit.BukkitWorld;
 import com.khorn.terraincontrol.generator.biome.BiomeGenerator;
 import com.khorn.terraincontrol.generator.biome.OutputType;
 import com.khorn.terraincontrol.util.minecraftTypes.DefaultBiome;
-import net.minecraft.server.v1_12_R1.BiomeBase;
-import net.minecraft.server.v1_12_R1.BlockPosition;
-import net.minecraft.server.v1_12_R1.WorldChunkManager;
-import net.minecraft.server.v1_12_R1.WorldGenVillage;
+
+import net.minecraft.server.v1_13_R2.BiomeBase;
+import net.minecraft.server.v1_13_R2.BlockPosition;
+import net.minecraft.server.v1_13_R2.IBlockData;
+import net.minecraft.server.v1_13_R2.StructureGenerator;
+import net.minecraft.server.v1_13_R2.WorldChunkManager;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Minecraft's biome generator class is WorldChunkManager, we use
@@ -28,13 +31,11 @@ public class TXWorldChunkManager extends WorldChunkManager
         this.biomeGenerator = biomeGenerator;
     }
 
-    @Override
     public BiomeBase getBiome(BlockPosition blockPos)
     {
         return localWorld.getBiomeById(biomeGenerator.getBiome(blockPos.getX(), blockPos.getZ())).getHandle();
     }
 
-    @Override
     public BiomeBase[] getBiomes(BiomeBase[] paramArrayOfBiomeBase, int paramInt1, int paramInt2, int paramInt3, int paramInt4)
     {
         if ((paramArrayOfBiomeBase == null) || (paramArrayOfBiomeBase.length < paramInt3 * paramInt4))
@@ -53,7 +54,6 @@ public class TXWorldChunkManager extends WorldChunkManager
         return paramArrayOfBiomeBase;
     }
 
-    @Override
     public BiomeBase[] a(BiomeBase[] paramArrayOfBiomeBase, int paramInt1, int paramInt2, int paramInt3, int paramInt4, boolean paramBoolean)
     {
         if ((paramArrayOfBiomeBase == null) || (paramArrayOfBiomeBase.length < paramInt3 * paramInt4))
@@ -72,17 +72,17 @@ public class TXWorldChunkManager extends WorldChunkManager
         return paramArrayOfBiomeBase;
     }
 
-    @Override
+    
     // areBiomesViable
     public boolean a(int paramInt1, int paramInt2, int paramInt3, List<BiomeBase> paramList)
     {
         // Hack for villages in other biomes
         // (The alternative would be to completely override the village spawn
         // code)
-        if (paramList == WorldGenVillage.a && localWorld.villageGen != null)
-        {
-            paramList = localWorld.villageGen.villageSpawnBiomes;
-        }
+//        if (paramList == WorldGenVillage.a && localWorld.villageGen != null)
+//        {
+//            paramList = localWorld.villageGen.villageSpawnBiomes;
+//        }
 
         int i = paramInt1 - paramInt3 >> 2;
         int j = paramInt2 - paramInt3 >> 2;
@@ -122,7 +122,7 @@ public class TXWorldChunkManager extends WorldChunkManager
                 continue;
             int i4 = i + i3 % n << 2;
             int i5 = j + i3 / n << 2;
-            BiomeBase localBiomeBase = BiomeBase.getBiome(arrayOfInt[i3]);
+            BiomeBase localBiomeBase = BiomeBase.getBiome(arrayOfInt[i3], null);
             if ((!paramList.contains(localBiomeBase)) || ((localBlockPosition != null) && (paramRandom.nextInt(i2 + 1) != 0)))
                 continue;
             localBlockPosition = new BlockPosition(i4, 0, i5);
@@ -132,9 +132,39 @@ public class TXWorldChunkManager extends WorldChunkManager
         return localBlockPosition;
     }
 
-    @Override
-    public void b()
-    {
-        this.biomeGenerator.cleanupCache();
-    }
+	@Override
+	public boolean a(StructureGenerator<?> arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Set<BiomeBase> a(int arg0, int arg1, int arg2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BiomeBase[] a(int arg0, int arg1, int arg2, int arg3, boolean arg4) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BiomeBase getBiome(BlockPosition arg0, BiomeBase arg1) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BiomeBase[] getBiomes(int arg0, int arg1, int arg2, int arg3) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<IBlockData> b() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

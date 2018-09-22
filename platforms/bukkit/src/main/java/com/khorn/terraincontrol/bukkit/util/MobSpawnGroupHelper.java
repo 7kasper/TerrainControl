@@ -4,14 +4,21 @@ import com.khorn.terraincontrol.TerrainControl;
 import com.khorn.terraincontrol.configuration.WeightedMobSpawnGroup;
 import com.khorn.terraincontrol.configuration.standard.MojangSettings.EntityCategory;
 import com.khorn.terraincontrol.logging.LogMarker;
-import net.minecraft.server.v1_12_R1.*;
-import net.minecraft.server.v1_12_R1.BiomeBase.BiomeMeta;
-import net.minecraft.server.v1_12_R1.WeightedRandom.WeightedRandomChoice;
+
+import net.minecraft.server.v1_13_R2.BiomeBase;
+import net.minecraft.server.v1_13_R2.BiomeBase.BiomeMeta;
+import net.minecraft.server.v1_13_R2.EntityInsentient;
+import net.minecraft.server.v1_13_R2.EntityTypes;
+import net.minecraft.server.v1_13_R2.EnumCreatureType;
+import net.minecraft.server.v1_13_R2.MinecraftKey;
+import net.minecraft.server.v1_13_R2.WeightedRandom.WeightedRandomChoice;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import org.bukkit.entity.EntityType;
 
 /**
  * Methods for conversion between mob lists in Minecraft and in the plugin.
@@ -120,7 +127,7 @@ public final class MobSpawnGroupHelper
         List<BiomeMeta> biomeList = new ArrayList<BiomeMeta>();
         for (WeightedMobSpawnGroup mobGroup : weightedMobSpawnGroups)
         {
-            Class<? extends EntityInsentient> entityClass = toMinecraftClass(mobGroup.getInternalName());
+            EntityTypes<? extends EntityInsentient> entityClass = toMinecraftClass(mobGroup.getInternalName());
             if (entityClass != null)
             {
                 biomeList.add(new BiomeMeta(entityClass, mobGroup.getWeight(), mobGroup.getMin(), mobGroup.getMax()));
@@ -137,29 +144,29 @@ public final class MobSpawnGroupHelper
      * Gets the entity class corresponding to the given entity name. This
      * method is the inverse of {@link #fromMinecraftClass(Class)}.
      * @param mobName The mob name.
-     * @return The entity class, or null if not found.
+     * @return The enti	ty class, or null if not found.
      */
-    static Class<? extends EntityInsentient> toMinecraftClass(String mobName)
+    static EntityTypes<? extends EntityInsentient> toMinecraftClass(String mobName)
     {
-        Class<? extends Entity> clazz = EntityTypes.b.get(new MinecraftKey(mobName));
+		Class<EntityType> clazz = null;//EntityTypes.clsToTypeMap.get(new MinecraftKey(mobName)).getDeclaringClass();
         if (clazz == null)
         {
             return null;
         }
         if (EntityInsentient.class.isAssignableFrom(clazz))
         {
-            return clazz.asSubclass(EntityInsentient.class);
+            //return (EntityTypes<? extends EntityInsentient>) clazz.asSubclass(EntityInsentient.class);
         }
         return null;
     }
 
     /**
      * Gets the entity name corresponding to the given entity class.
-     * @param entityClass The entity class.
+     * @param b The entity class.
      * @return The entity name, or null if not found.
      */
-    private static String fromMinecraftClass(Class<? extends Entity> entityClass)
+    private static String fromMinecraftClass(EntityTypes<? extends EntityInsentient> b)
     {
-        return EntityTypes.b.b(entityClass).toString();
+        return b.toString();
     }
 }
